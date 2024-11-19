@@ -1,12 +1,52 @@
 [[extend 'layout.html']]
-
 <div class="section" id="app">
-<!-- Complete.  -->
+    <div class="columns">
+        <!-- Left column (3/4 width) -->
+        <div class="column is-three-quarters">
+            <!-- Post creation area -->
+            <div class="field" v-if="user_email">
+                <div class="control">
+                    <textarea id="post-input" class="textarea" v-model="newPostText" placeholder="What's on your mind?"></textarea>
+                </div>
+                <div class="control mt-2">
+                    <button id="post-button" class="button is-primary" @click="createPost">Post</button>
+                </div>
+            </div>
+
+            <!-- Posts display -->
+            <div class="posts mt-4">
+                <div v-for="post in filteredPosts" :key="post.id" class="post box mb-4">
+                    <p class="post-content">{{ post.content }}</p>
+                    <div class="post-meta mt-2">
+                        <small class="has-text-grey">Posted by {{ post.user_email }}</small>
+                        <button v-if="post.user_email === user_email" 
+                                @click="deletePost(post.id)"
+                                class="delete-button button is-small is-danger is-light ml-2">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column (1/4 width) -->
+        <div class="column is-one-quarter">
+            <div class="tags">
+                <button v-for="tag in tags" 
+                        :key="tag"
+                        class="tag button mb-1"
+                        :class="{'is-info': isTagActive(tag)}"
+                        @click="toggleTag(tag)">
+                    {{ tag }}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 [[block page_scripts]]
 <script>
-  // Complete.
+    // Initialize Vue and axios
 </script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"></script>
